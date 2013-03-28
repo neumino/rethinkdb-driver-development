@@ -17,11 +17,13 @@ Dependency
 ----
 - [RethinkDB](https://github.com/rethinkdb/rethinkdb)
 - Python 2
+- Python protobuf
 
 Install
 ----
 ```
 git clone git@github.com:neumino/rethinkdb-driver-development
+sudo pip install protobuf
 ```
 
 Run
