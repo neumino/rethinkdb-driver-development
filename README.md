@@ -12,17 +12,23 @@ Write a query and get back
 - The serialized response from the server
 - The response from the server
 
+
 Dependency
 ----
-RethinkDB
+- [RethinkDB](https://github.com/rethinkdb/rethinkdb)
+- Python 2
 
 Install
 ----
+```
 git clone git@github.com:neumino/rethinkdb-driver-development
+```
 
 Run
 ----
+```
 python test.py
+<<<<<<< HEAD
 
 Example
 ----
@@ -67,3 +73,6 @@ response {
     r_num: 1.0
 }
 
+=======
+```
+>>>>>>> af8f404e6a20a339721f387291a5188795115a6d
