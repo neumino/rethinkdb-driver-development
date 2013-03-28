@@ -28,10 +28,18 @@ Run
 ----
 ```
 python test.py
-<<<<<<< HEAD
+```
 
 Example
 ----
+```
+michel@xone:~/projects/driver_dvpt$ python2 test.py 
+Host (default value is 'localhost'):
+
+Driver port (default value is 28015):
+
+Connecting to the server...
+Connected.
 ----------------------------------------
 Enter your query (without using .run()):
 r.expr(1)
