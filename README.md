@@ -12,14 +12,20 @@ Write a query and get back
 - The serialized response from the server
 - The response from the server
 
+
 Dependency
 ----
-RethinkDB
+[RethinkDB](https://github.com/rethinkdb/rethinkdb)
+Python 2
 
 Install
 ----
+```
 git clone git@github.com:neumino/rethinkdb-driver-development
+```
 
 Run
 ----
+```
 python test.py
+```
