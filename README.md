@@ -15,8 +15,8 @@ Write a query and get back
 
 Dependency
 ----
-[RethinkDB](https://github.com/rethinkdb/rethinkdb)
-Python 2
+- [RethinkDB](https://github.com/rethinkdb/rethinkdb)
+- Python 2
 
 Install
 ----
