@@ -15,7 +15,7 @@ Write a query and get back
 
 Dependency
 ----
-- [RethinkDB](https://github.com/rethinkdb/rethinkdb)
+- [RethinkDB](https://github.com/rethinkdb/rethinkdb) 1.6
 - Python 2
 - Python protobuf
 
