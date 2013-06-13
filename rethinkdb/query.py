@@ -5,28 +5,11 @@ import ql2_pb2 as p
 All top level functions defined here are the starting points for RQL queries
 """
 
-# This is both an external function and one used extensively
-# internally to convert coerce python values to RQL types
-def expr(val):
-    '''
-        Convert a Python primitive into a RQL primitive value
-    '''
-    if isinstance(val, RqlQuery):
-        return val
-    elif isinstance(val, list):
-        return MakeArray(*val)
-    elif isinstance(val, dict):
-        return MakeObj(**val)
-    elif callable(val):
-        return Func(val)
-    else:
-        return Datum(val)
+def js(js_str, timeout=()):
+    return JavaScript(js_str, timeout=timeout)
 
-def js(js_str):
-    return JavaScript(js_str)
-
-def error(msg):
-    return UserError(msg)
+def error(*msg):
+    return UserError(*msg)
 
 def do(arg0, *args):
     args = [arg0]+[x for x in args]
@@ -48,6 +31,15 @@ def db_drop(db_name):
 
 def db_list():
     return DbList()
+
+def table_create(table_name, primary_key=(), datacenter=(), cache_size=(), durability=()):
+    return TableCreate(table_name, primary_key=primary_key, datacenter=datacenter, cache_size=cache_size, durability=durability)
+
+def table_drop(table_name):
+    return TableDrop(table_name)
+
+def table_list():
+    return TableList()
 
 def branch(predicate, true_branch, false_branch):
     return Branch(predicate, true_branch, false_branch)
@@ -110,3 +102,9 @@ def all(*args):
 
 def any(*args):
     return Any(*args)
+
+def type_of(val):
+    return TypeOf(val)
+
+def info(val):
+    return Info(val)

@@ -3,7 +3,7 @@ import ql2_pb2 as p
 class RqlError(Exception):
     def __init__(self, message, term, frames):
         self.message = message
-        self.frames = [frame.pos if frame.type is p.Frame.POS else frame.opt for frame in frames]
+        self.frames = [frame.pos if frame.type == p.Frame.POS else frame.opt for frame in frames]
         self.query_printer = QueryPrinter(term, self.frames)
 
     def __str__(self):
@@ -19,7 +19,8 @@ class RqlCompileError(RqlError):
     pass
 
 class RqlRuntimeError(RqlError):
-    pass
+    def __str__(self):
+        return self.message+" in:\n"+self.query_printer.print_query()+'\n'+self.query_printer.print_carrots()
 
 class RqlDriverError(Exception):
     def __init__(self, message):

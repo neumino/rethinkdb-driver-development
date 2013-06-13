@@ -7,7 +7,9 @@ import struct
 
 import ql2_pb2 as p
 
+import repl # For the repl connection
 from errors import *
+from ast import Datum, DB, expr
 
 class Cursor(object):
     def __init__(self, conn, query, term, chunk, complete):
@@ -39,14 +41,13 @@ class Cursor(object):
         self.conn._end(self.query, self.term)
 
 class Connection(object):
-    repl_connection = None
-
-    def __init__(self, host, port, db):
+    def __init__(self, host, port, db=None, auth_key=""):
         self.socket = None
         self.host = host
         self.port = port
         self.next_token = 1
-        self.db = DB(db)
+        self.db = db
+        self.auth_key = auth_key
         self.reconnect()
 
     def __enter__(self):
@@ -56,7 +57,7 @@ class Connection(object):
         self.close()
 
     def use(self, db):
-        self.db = DB(db)
+        self.db = db
 
     def reconnect(self):
         self.close()
@@ -65,7 +66,19 @@ class Connection(object):
         except Exception as err:
             raise RqlDriverError("Could not connect to %s:%s." % (self.host, self.port))
 
-        self.socket.sendall(struct.pack("<L", p.VersionDummy.V0_1))
+        self.socket.sendall(struct.pack("<L", p.VersionDummy.V0_2))
+        self.socket.sendall(struct.pack("<L", len(self.auth_key)) + self.auth_key)
+
+        # Read out the response from the server, which will be a null-terminated string
+        response = ""
+        while True:
+            char = self.socket.recv(1)
+            if char == "\0":
+                break
+            response += char
+
+        if response != "SUCCESS":
+            raise RqlDriverError("Server dropped connection with message: \"%s\"" % response.strip())
 
     def close(self):
         if self.socket:
@@ -77,7 +90,7 @@ class Connection(object):
     # by subsequence calls to `query.run`. Useful for trying out RethinkDB in
     # a Python repl environment.
     def repl(self):
-        Connection.repl_connection = self
+        repl.default_connection = self
         return self
 
     def _start(self, term, **global_opt_args):
@@ -97,16 +110,20 @@ class Connection(object):
             global_opt_args['db'] = DB(global_opt_args['db'])
         else:
             if self.db:
-               global_opt_args['db'] = self.db
+               global_opt_args['db'] = DB(self.db)
 
         for k,v in global_opt_args.iteritems():
             pair = query.global_optargs.add()
             pair.key = k
             expr(v).build(pair.val)
 
+        noreply = False
+        if 'noreply' in global_opt_args:
+            noreply = global_opt_args['noreply']
+
         # Compile query to protobuf
         term.build(query.query)
-        return self._send_query(query, term)
+        return self._send_query(query, term, noreply)
 
     def _continue(self, orig_query, orig_term):
         query = p.Query()
@@ -116,11 +133,11 @@ class Connection(object):
 
     def _end(self, orig_query, orig_term):
         query = p.Query()
-        query.type = p.Query.END
+        query.type = p.Query.STOP
         query.token = orig_query.token
         return self._send_query(query, orig_term)
 
-    def _send_query(self, query, term):
+    def _send_query(self, query, term, noreply=False):
 
         # Error if this connection has closed
         if not self.socket:
@@ -140,61 +157,85 @@ class Connection(object):
 
         self.socket.sendall(query_header + query_protobuf)
 
+        if noreply:
+            return None
+
         # Get response
-        response_header = self.socket.recv(4)
-        if len(response_header) == 0:
-            raise RqlDriverError("Connection is closed.")
-
-        # The first 4 bytes give the expected length of this response
-        (response_len,) = struct.unpack("<L", response_header)
-
         response_buf = ''
-        while len(response_buf) < response_len:
-            chunk = self.socket.recv(response_len - len(response_buf))
-            if chunk == '':
-                raise RqlDriverError("Connection is broken.")
-            response_buf += chunk
+        try:
+            response_header = ''
+            while len(response_header) < 4:
+                chunk = self.socket.recv(4)
+                if len(chunk) == 0:
+                    raise RqlDriverError("Connection is closed.")
+                response_header += chunk
 
-        print 'Protobuf received from the server:'
-        for byte in bytearray(response_header+response_buf):
-            print byte,
-        print
-        print
+            # The first 4 bytes give the expected length of this response
+            (response_len,) = struct.unpack("<L", response_header)
+
+            while len(response_buf) < response_len:
+                chunk = self.socket.recv(response_len - len(response_buf))
+                if chunk == '':
+                    raise RqlDriverError("Connection is broken.")
+                response_buf += chunk
+
+            print 'Protobuf received from the server:'
+            for byte in bytearray(response_header+response_buf):
+                print byte,
+            print
+            print
+
+        except KeyboardInterrupt as err:
+            # When interrupted while waiting for a response cancel the outstanding
+            # requests by resetting this connection
+            self.reconnect()
+            raise err
 
         # Construct response
         response = p.Response()
         response.ParseFromString(response_buf)
+
         print 'Parsed Response from the server'
         print response
 
+
+
+        # Check that this is the response we were expecting
+        if response.token != query.token:
+            # This response is corrupted or not intended for us.
+            raise RqlDriverError("Unexpected response received.")
+
         # Error responses
-        if response.type is p.Response.RUNTIME_ERROR:
+        if response.type == p.Response.RUNTIME_ERROR:
             message = Datum.deconstruct(response.response[0])
             backtrace = response.backtrace
             frames = backtrace.frames or []
             raise RqlRuntimeError(message, term, frames)
-        elif response.type is p.Response.COMPILE_ERROR:
+        elif response.type == p.Response.COMPILE_ERROR:
             message = Datum.deconstruct(response.response[0])
             backtrace = response.backtrace
             frames = backtrace.frames or []
             raise RqlCompileError(message, term, frames)
-        elif response.type is p.Response.CLIENT_ERROR:
+        elif response.type == p.Response.CLIENT_ERROR:
             message = Datum.deconstruct(response.response[0])
             backtrace = response.backtrace
             frames = backtrace.frames or []
             raise RqlClientError(message, term, frames)
 
         # Sequence responses
-        if response.type is p.Response.SUCCESS_PARTIAL or response.type is p.Response.SUCCESS_SEQUENCE:
+        elif response.type == p.Response.SUCCESS_PARTIAL or response.type == p.Response.SUCCESS_SEQUENCE:
             chunk = [Datum.deconstruct(datum) for datum in response.response]
-            return Cursor(self, query, term, chunk, response.type is p.Response.SUCCESS_SEQUENCE)
+            return Cursor(self, query, term, chunk, response.type == p.Response.SUCCESS_SEQUENCE)
 
         # Atom response
-        if response.type is p.Response.SUCCESS_ATOM:
+        elif response.type == p.Response.SUCCESS_ATOM:
+            if len(response.response) < 1:
+                return None
             return Datum.deconstruct(response.response[0])
 
-def connect(host='localhost', port=28015, db='test'):
-    return Connection(host, port, db)
+        # Default for unknown response types
+        else:
+            raise RqlDriverError("Unknown Response type %d encountered in response." % response.type)
 
-from ast import Datum, DB
-from query import expr
+def connect(host='localhost', port=28015, db=None, auth_key=""):
+    return Connection(host, port, db, auth_key)
