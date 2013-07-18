@@ -12,9 +12,12 @@ if port_raw is '':
     port = 28015
 else:
     port = int(port_raw)
-    
+
+print "Auth key (default value is ''):"
+auth_key = raw_input()
+
 print "Connecting to the server..."
-c = r.connect(host=host, port=port)
+c = r.connect(host=host, port=port, auth_key=auth_key)
 print "Connected."
 
 while True:
