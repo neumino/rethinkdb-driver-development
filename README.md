@@ -40,6 +40,8 @@ Host (default value is 'localhost'):
 
 Driver port (default value is 28015):
 
+Auth key (default value is ''):
+
 Connecting to the server...
 Connected.
 ----------------------------------------
