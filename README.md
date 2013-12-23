@@ -13,9 +13,12 @@ Write a query and get back
 - The response from the server
 
 
+Current driver used: 1.11
+
+
 Dependency
 ----
-- [RethinkDB](https://github.com/rethinkdb/rethinkdb) 1.6
+- [RethinkDB](https://github.com/rethinkdb/rethinkdb)
 - Python 2
 - Python protobuf
 

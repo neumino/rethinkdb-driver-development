@@ -65,11 +65,12 @@ inline bool VersionDummy_Version_Parse(
 enum Query_QueryType {
   Query_QueryType_START = 1,
   Query_QueryType_CONTINUE = 2,
-  Query_QueryType_STOP = 3
+  Query_QueryType_STOP = 3,
+  Query_QueryType_NOREPLY_WAIT = 4
 };
 bool Query_QueryType_IsValid(int value);
 const Query_QueryType Query_QueryType_QueryType_MIN = Query_QueryType_START;
-const Query_QueryType Query_QueryType_QueryType_MAX = Query_QueryType_STOP;
+const Query_QueryType Query_QueryType_QueryType_MAX = Query_QueryType_NOREPLY_WAIT;
 const int Query_QueryType_QueryType_ARRAYSIZE = Query_QueryType_QueryType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* Query_QueryType_descriptor();
@@ -105,6 +106,7 @@ enum Response_ResponseType {
   Response_ResponseType_SUCCESS_ATOM = 1,
   Response_ResponseType_SUCCESS_SEQUENCE = 2,
   Response_ResponseType_SUCCESS_PARTIAL = 3,
+  Response_ResponseType_WAIT_COMPLETE = 4,
   Response_ResponseType_CLIENT_ERROR = 16,
   Response_ResponseType_COMPILE_ERROR = 17,
   Response_ResponseType_RUNTIME_ERROR = 18
@@ -223,6 +225,7 @@ enum Term_TermType {
   Term_TermType_TABLE_CREATE = 60,
   Term_TermType_TABLE_DROP = 61,
   Term_TermType_TABLE_LIST = 62,
+  Term_TermType_SYNC = 138,
   Term_TermType_INDEX_CREATE = 75,
   Term_TermType_INDEX_DROP = 76,
   Term_TermType_INDEX_LIST = 77,
@@ -281,7 +284,7 @@ enum Term_TermType {
 };
 bool Term_TermType_IsValid(int value);
 const Term_TermType Term_TermType_TermType_MIN = Term_TermType_DATUM;
-const Term_TermType Term_TermType_TermType_MAX = Term_TermType_LITERAL;
+const Term_TermType Term_TermType_TermType_MAX = Term_TermType_SYNC;
 const int Term_TermType_TermType_ARRAYSIZE = Term_TermType_TermType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* Term_TermType_descriptor();
@@ -549,6 +552,7 @@ class Query : public ::google::protobuf::Message {
   static const QueryType START = Query_QueryType_START;
   static const QueryType CONTINUE = Query_QueryType_CONTINUE;
   static const QueryType STOP = Query_QueryType_STOP;
+  static const QueryType NOREPLY_WAIT = Query_QueryType_NOREPLY_WAIT;
   static inline bool QueryType_IsValid(int value) {
     return Query_QueryType_IsValid(value);
   }
@@ -917,6 +921,7 @@ class Response : public ::google::protobuf::Message {
   static const ResponseType SUCCESS_ATOM = Response_ResponseType_SUCCESS_ATOM;
   static const ResponseType SUCCESS_SEQUENCE = Response_ResponseType_SUCCESS_SEQUENCE;
   static const ResponseType SUCCESS_PARTIAL = Response_ResponseType_SUCCESS_PARTIAL;
+  static const ResponseType WAIT_COMPLETE = Response_ResponseType_WAIT_COMPLETE;
   static const ResponseType CLIENT_ERROR = Response_ResponseType_CLIENT_ERROR;
   static const ResponseType COMPILE_ERROR = Response_ResponseType_COMPILE_ERROR;
   static const ResponseType RUNTIME_ERROR = Response_ResponseType_RUNTIME_ERROR;
@@ -1510,6 +1515,7 @@ class Term : public ::google::protobuf::Message {
   static const TermType TABLE_CREATE = Term_TermType_TABLE_CREATE;
   static const TermType TABLE_DROP = Term_TermType_TABLE_DROP;
   static const TermType TABLE_LIST = Term_TermType_TABLE_LIST;
+  static const TermType SYNC = Term_TermType_SYNC;
   static const TermType INDEX_CREATE = Term_TermType_INDEX_CREATE;
   static const TermType INDEX_DROP = Term_TermType_INDEX_DROP;
   static const TermType INDEX_LIST = Term_TermType_INDEX_LIST;
