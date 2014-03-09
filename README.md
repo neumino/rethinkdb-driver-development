@@ -4,9 +4,9 @@ rethinkdb-driver-development
 Tool to help users create a new driver for RethinkDB.
 A quick and dirty fork of RethinkDB's python driver.
 
-Run `pyhon test.py`
+Run `python test.py`
 Specify the host and driver port of your RethinkDB instance
-Write a query and get back
+Write a query and get back:
 - The message
 - The serialized message
 - The serialized response from the server
