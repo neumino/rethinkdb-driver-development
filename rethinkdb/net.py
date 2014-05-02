@@ -14,6 +14,9 @@ from rethinkdb import repl # For the repl connection
 from rethinkdb.errors import *
 from rethinkdb.ast import RqlQuery, DB, recursively_convert_pseudotypes
 
+import pprint
+pp = pprint.PrettyPrinter(indent=4)
+
 class Query(object):
     def __init__(self, type, token, term, global_optargs):
         self.type = type
@@ -258,6 +261,8 @@ class Connection(object):
                 raise err
 
             # Construct response
+            print "Response:"
+            print response_buf
             response = Response(response_token, response_buf)
 
             # Check that this is the response we were expecting
@@ -296,6 +301,8 @@ class Connection(object):
 
         print "Query:"
         print query_header+query_str
+        print
+        print
 
         self._sock_sendall(query_header + query_str)
 
@@ -304,9 +311,6 @@ class Connection(object):
 
         # Get response
         response = self._read_response(query.token)
-
-        print "Response:"
-        print response
 
         self._check_error_response(response, query.term)
 
