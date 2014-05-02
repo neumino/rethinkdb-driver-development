@@ -13,7 +13,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='ql2.proto',
   package='',
-  serialized_pb='\n\tql2.proto\"5\n\x0cVersionDummy\"%\n\x07Version\x12\x0c\n\x04V0_1\x10\xb6\xf4\x86\xfb\x03\x12\x0c\n\x04V0_2\x10\xe1\x83\xc2\x91\x07\"\xa6\x02\n\x05Query\x12\x1e\n\x04type\x18\x01 \x01(\x0e\x32\x10.Query.QueryType\x12\x14\n\x05query\x18\x02 \x01(\x0b\x32\x05.Term\x12\r\n\x05token\x18\x03 \x01(\x03\x12\x1f\n\x10OBSOLETE_noreply\x18\x04 \x01(\x08:\x05\x66\x61lse\x12\x1d\n\x0e\x61\x63\x63\x65pts_r_json\x18\x05 \x01(\x08:\x05\x66\x61lse\x12(\n\x0eglobal_optargs\x18\x06 \x03(\x0b\x32\x10.Query.AssocPair\x1a,\n\tAssocPair\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x12\n\x03val\x18\x02 \x01(\x0b\x32\x05.Term\"@\n\tQueryType\x12\t\n\x05START\x10\x01\x12\x0c\n\x08\x43ONTINUE\x10\x02\x12\x08\n\x04STOP\x10\x03\x12\x10\n\x0cNOREPLY_WAIT\x10\x04\"`\n\x05\x46rame\x12\x1e\n\x04type\x18\x01 \x01(\x0e\x32\x10.Frame.FrameType\x12\x0b\n\x03pos\x18\x02 \x01(\x03\x12\x0b\n\x03opt\x18\x03 \x01(\t\"\x1d\n\tFrameType\x12\x07\n\x03POS\x10\x01\x12\x07\n\x03OPT\x10\x02\"#\n\tBacktrace\x12\x16\n\x06\x66rames\x18\x01 \x03(\x0b\x32\x06.Frame\"\xaa\x02\n\x08Response\x12$\n\x04type\x18\x01 \x01(\x0e\x32\x16.Response.ResponseType\x12\r\n\x05token\x18\x02 \x01(\x03\x12\x18\n\x08response\x18\x03 \x03(\x0b\x32\x06.Datum\x12\x1d\n\tbacktrace\x18\x04 \x01(\x0b\x32\n.Backtrace\x12\x17\n\x07profile\x18\x05 \x01(\x0b\x32\x06.Datum\"\x96\x01\n\x0cResponseType\x12\x10\n\x0cSUCCESS_ATOM\x10\x01\x12\x14\n\x10SUCCESS_SEQUENCE\x10\x02\x12\x13\n\x0fSUCCESS_PARTIAL\x10\x03\x12\x11\n\rWAIT_COMPLETE\x10\x04\x12\x10\n\x0c\x43LIENT_ERROR\x10\x10\x12\x11\n\rCOMPILE_ERROR\x10\x11\x12\x11\n\rRUNTIME_ERROR\x10\x12\"\xac\x02\n\x05\x44\x61tum\x12\x1e\n\x04type\x18\x01 \x01(\x0e\x32\x10.Datum.DatumType\x12\x0e\n\x06r_bool\x18\x02 \x01(\x08\x12\r\n\x05r_num\x18\x03 \x01(\x01\x12\r\n\x05r_str\x18\x04 \x01(\t\x12\x17\n\x07r_array\x18\x05 \x03(\x0b\x32\x06.Datum\x12\"\n\x08r_object\x18\x06 \x03(\x0b\x32\x10.Datum.AssocPair\x1a-\n\tAssocPair\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x13\n\x03val\x18\x02 \x01(\x0b\x32\x06.Datum\"`\n\tDatumType\x12\n\n\x06R_NULL\x10\x01\x12\n\n\x06R_BOOL\x10\x02\x12\t\n\x05R_NUM\x10\x03\x12\t\n\x05R_STR\x10\x04\x12\x0b\n\x07R_ARRAY\x10\x05\x12\x0c\n\x08R_OBJECT\x10\x06\x12\n\n\x06R_JSON\x10\x07*\x07\x08\x90N\x10\xa1\x9c\x01\"\xe5\x0e\n\x04Term\x12\x1c\n\x04type\x18\x01 \x01(\x0e\x32\x0e.Term.TermType\x12\x15\n\x05\x64\x61tum\x18\x02 \x01(\x0b\x32\x06.Datum\x12\x13\n\x04\x61rgs\x18\x03 \x03(\x0b\x32\x05.Term\x12 \n\x07optargs\x18\x04 \x03(\x0b\x32\x0f.Term.AssocPair\x1a,\n\tAssocPair\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x12\n\x03val\x18\x02 \x01(\x0b\x32\x05.Term\"\xb9\r\n\x08TermType\x12\t\n\x05\x44\x41TUM\x10\x01\x12\x0e\n\nMAKE_ARRAY\x10\x02\x12\x0c\n\x08MAKE_OBJ\x10\x03\x12\x07\n\x03VAR\x10\n\x12\x0e\n\nJAVASCRIPT\x10\x0b\x12\t\n\x05\x45RROR\x10\x0c\x12\x10\n\x0cIMPLICIT_VAR\x10\r\x12\x06\n\x02\x44\x42\x10\x0e\x12\t\n\x05TABLE\x10\x0f\x12\x07\n\x03GET\x10\x10\x12\x0b\n\x07GET_ALL\x10N\x12\x06\n\x02\x45Q\x10\x11\x12\x06\n\x02NE\x10\x12\x12\x06\n\x02LT\x10\x13\x12\x06\n\x02LE\x10\x14\x12\x06\n\x02GT\x10\x15\x12\x06\n\x02GE\x10\x16\x12\x07\n\x03NOT\x10\x17\x12\x07\n\x03\x41\x44\x44\x10\x18\x12\x07\n\x03SUB\x10\x19\x12\x07\n\x03MUL\x10\x1a\x12\x07\n\x03\x44IV\x10\x1b\x12\x07\n\x03MOD\x10\x1c\x12\n\n\x06\x41PPEND\x10\x1d\x12\x0b\n\x07PREPEND\x10P\x12\x0e\n\nDIFFERENCE\x10_\x12\x0e\n\nSET_INSERT\x10X\x12\x14\n\x10SET_INTERSECTION\x10Y\x12\r\n\tSET_UNION\x10Z\x12\x12\n\x0eSET_DIFFERENCE\x10[\x12\t\n\x05SLICE\x10\x1e\x12\x08\n\x04SKIP\x10\x46\x12\t\n\x05LIMIT\x10G\x12\x0e\n\nINDEXES_OF\x10W\x12\x0c\n\x08\x43ONTAINS\x10]\x12\r\n\tGET_FIELD\x10\x1f\x12\x08\n\x04KEYS\x10^\x12\x0e\n\nHAS_FIELDS\x10 \x12\x0f\n\x0bWITH_FIELDS\x10`\x12\t\n\x05PLUCK\x10!\x12\x0b\n\x07WITHOUT\x10\"\x12\t\n\x05MERGE\x10#\x12\x0b\n\x07\x42\x45TWEEN\x10$\x12\n\n\x06REDUCE\x10%\x12\x07\n\x03MAP\x10&\x12\n\n\x06\x46ILTER\x10\'\x12\r\n\tCONCATMAP\x10(\x12\x0b\n\x07ORDERBY\x10)\x12\x0c\n\x08\x44ISTINCT\x10*\x12\t\n\x05\x43OUNT\x10+\x12\x0c\n\x08IS_EMPTY\x10V\x12\t\n\x05UNION\x10,\x12\x07\n\x03NTH\x10-\x12\x16\n\x12GROUPED_MAP_REDUCE\x10.\x12\x0b\n\x07GROUPBY\x10/\x12\x0e\n\nINNER_JOIN\x10\x30\x12\x0e\n\nOUTER_JOIN\x10\x31\x12\x0b\n\x07\x45Q_JOIN\x10\x32\x12\x07\n\x03ZIP\x10H\x12\r\n\tINSERT_AT\x10R\x12\r\n\tDELETE_AT\x10S\x12\r\n\tCHANGE_AT\x10T\x12\r\n\tSPLICE_AT\x10U\x12\r\n\tCOERCE_TO\x10\x33\x12\n\n\x06TYPEOF\x10\x34\x12\n\n\x06UPDATE\x10\x35\x12\n\n\x06\x44\x45LETE\x10\x36\x12\x0b\n\x07REPLACE\x10\x37\x12\n\n\x06INSERT\x10\x38\x12\r\n\tDB_CREATE\x10\x39\x12\x0b\n\x07\x44\x42_DROP\x10:\x12\x0b\n\x07\x44\x42_LIST\x10;\x12\x10\n\x0cTABLE_CREATE\x10<\x12\x0e\n\nTABLE_DROP\x10=\x12\x0e\n\nTABLE_LIST\x10>\x12\t\n\x04SYNC\x10\x8a\x01\x12\x10\n\x0cINDEX_CREATE\x10K\x12\x0e\n\nINDEX_DROP\x10L\x12\x0e\n\nINDEX_LIST\x10M\x12\x11\n\x0cINDEX_STATUS\x10\x8b\x01\x12\x0f\n\nINDEX_WAIT\x10\x8c\x01\x12\x0b\n\x07\x46UNCALL\x10@\x12\n\n\x06\x42RANCH\x10\x41\x12\x07\n\x03\x41NY\x10\x42\x12\x07\n\x03\x41LL\x10\x43\x12\x0b\n\x07\x46OREACH\x10\x44\x12\x08\n\x04\x46UNC\x10\x45\x12\x07\n\x03\x41SC\x10I\x12\x08\n\x04\x44\x45SC\x10J\x12\x08\n\x04INFO\x10O\x12\t\n\x05MATCH\x10\x61\x12\n\n\x06SAMPLE\x10Q\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\\\x12\x08\n\x04JSON\x10\x62\x12\x0b\n\x07ISO8601\x10\x63\x12\x0e\n\nTO_ISO8601\x10\x64\x12\x0e\n\nEPOCH_TIME\x10\x65\x12\x11\n\rTO_EPOCH_TIME\x10\x66\x12\x07\n\x03NOW\x10g\x12\x0f\n\x0bIN_TIMEZONE\x10h\x12\n\n\x06\x44URING\x10i\x12\x08\n\x04\x44\x41TE\x10j\x12\x0f\n\x0bTIME_OF_DAY\x10~\x12\x0c\n\x08TIMEZONE\x10\x7f\x12\t\n\x04YEAR\x10\x80\x01\x12\n\n\x05MONTH\x10\x81\x01\x12\x08\n\x03\x44\x41Y\x10\x82\x01\x12\x10\n\x0b\x44\x41Y_OF_WEEK\x10\x83\x01\x12\x10\n\x0b\x44\x41Y_OF_YEAR\x10\x84\x01\x12\n\n\x05HOURS\x10\x85\x01\x12\x0c\n\x07MINUTES\x10\x86\x01\x12\x0c\n\x07SECONDS\x10\x87\x01\x12\t\n\x04TIME\x10\x88\x01\x12\n\n\x06MONDAY\x10k\x12\x0b\n\x07TUESDAY\x10l\x12\r\n\tWEDNESDAY\x10m\x12\x0c\n\x08THURSDAY\x10n\x12\n\n\x06\x46RIDAY\x10o\x12\x0c\n\x08SATURDAY\x10p\x12\n\n\x06SUNDAY\x10q\x12\x0b\n\x07JANUARY\x10r\x12\x0c\n\x08\x46\x45\x42RUARY\x10s\x12\t\n\x05MARCH\x10t\x12\t\n\x05\x41PRIL\x10u\x12\x07\n\x03MAY\x10v\x12\x08\n\x04JUNE\x10w\x12\x08\n\x04JULY\x10x\x12\n\n\x06\x41UGUST\x10y\x12\r\n\tSEPTEMBER\x10z\x12\x0b\n\x07OCTOBER\x10{\x12\x0c\n\x08NOVEMBER\x10|\x12\x0c\n\x08\x44\x45\x43\x45MBER\x10}\x12\x0c\n\x07LITERAL\x10\x89\x01*\x07\x08\x90N\x10\xa1\x9c\x01')
+  serialized_pb='\n\tql2.proto\"o\n\x0cVersionDummy\"3\n\x07Version\x12\x0c\n\x04V0_1\x10\xb6\xf4\x86\xfb\x03\x12\x0c\n\x04V0_2\x10\xe1\x83\xc2\x91\x07\x12\x0c\n\x04V0_3\x10\xbe\xd0\xd7\xfb\x05\"*\n\x08Protocol\x12\x10\n\x08PROTOBUF\x10\xc1\xf8\xff\xb8\x02\x12\x0c\n\x04JSON\x10\xc7\xe1\xa5\xf3\x07\"\xa6\x02\n\x05Query\x12\x1e\n\x04type\x18\x01 \x01(\x0e\x32\x10.Query.QueryType\x12\x14\n\x05query\x18\x02 \x01(\x0b\x32\x05.Term\x12\r\n\x05token\x18\x03 \x01(\x03\x12\x1f\n\x10OBSOLETE_noreply\x18\x04 \x01(\x08:\x05\x66\x61lse\x12\x1d\n\x0e\x61\x63\x63\x65pts_r_json\x18\x05 \x01(\x08:\x05\x66\x61lse\x12(\n\x0eglobal_optargs\x18\x06 \x03(\x0b\x32\x10.Query.AssocPair\x1a,\n\tAssocPair\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x12\n\x03val\x18\x02 \x01(\x0b\x32\x05.Term\"@\n\tQueryType\x12\t\n\x05START\x10\x01\x12\x0c\n\x08\x43ONTINUE\x10\x02\x12\x08\n\x04STOP\x10\x03\x12\x10\n\x0cNOREPLY_WAIT\x10\x04\"`\n\x05\x46rame\x12\x1e\n\x04type\x18\x01 \x01(\x0e\x32\x10.Frame.FrameType\x12\x0b\n\x03pos\x18\x02 \x01(\x03\x12\x0b\n\x03opt\x18\x03 \x01(\t\"\x1d\n\tFrameType\x12\x07\n\x03POS\x10\x01\x12\x07\n\x03OPT\x10\x02\"#\n\tBacktrace\x12\x16\n\x06\x66rames\x18\x01 \x03(\x0b\x32\x06.Frame\"\xaa\x02\n\x08Response\x12$\n\x04type\x18\x01 \x01(\x0e\x32\x16.Response.ResponseType\x12\r\n\x05token\x18\x02 \x01(\x03\x12\x18\n\x08response\x18\x03 \x03(\x0b\x32\x06.Datum\x12\x1d\n\tbacktrace\x18\x04 \x01(\x0b\x32\n.Backtrace\x12\x17\n\x07profile\x18\x05 \x01(\x0b\x32\x06.Datum\"\x96\x01\n\x0cResponseType\x12\x10\n\x0cSUCCESS_ATOM\x10\x01\x12\x14\n\x10SUCCESS_SEQUENCE\x10\x02\x12\x13\n\x0fSUCCESS_PARTIAL\x10\x03\x12\x11\n\rWAIT_COMPLETE\x10\x04\x12\x10\n\x0c\x43LIENT_ERROR\x10\x10\x12\x11\n\rCOMPILE_ERROR\x10\x11\x12\x11\n\rRUNTIME_ERROR\x10\x12\"\xac\x02\n\x05\x44\x61tum\x12\x1e\n\x04type\x18\x01 \x01(\x0e\x32\x10.Datum.DatumType\x12\x0e\n\x06r_bool\x18\x02 \x01(\x08\x12\r\n\x05r_num\x18\x03 \x01(\x01\x12\r\n\x05r_str\x18\x04 \x01(\t\x12\x17\n\x07r_array\x18\x05 \x03(\x0b\x32\x06.Datum\x12\"\n\x08r_object\x18\x06 \x03(\x0b\x32\x10.Datum.AssocPair\x1a-\n\tAssocPair\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x13\n\x03val\x18\x02 \x01(\x0b\x32\x06.Datum\"`\n\tDatumType\x12\n\n\x06R_NULL\x10\x01\x12\n\n\x06R_BOOL\x10\x02\x12\t\n\x05R_NUM\x10\x03\x12\t\n\x05R_STR\x10\x04\x12\x0b\n\x07R_ARRAY\x10\x05\x12\x0c\n\x08R_OBJECT\x10\x06\x12\n\n\x06R_JSON\x10\x07*\x07\x08\x90N\x10\xa1\x9c\x01\"\xc4\x0f\n\x04Term\x12\x1c\n\x04type\x18\x01 \x01(\x0e\x32\x0e.Term.TermType\x12\x15\n\x05\x64\x61tum\x18\x02 \x01(\x0b\x32\x06.Datum\x12\x13\n\x04\x61rgs\x18\x03 \x03(\x0b\x32\x05.Term\x12 \n\x07optargs\x18\x04 \x03(\x0b\x32\x0f.Term.AssocPair\x1a,\n\tAssocPair\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x12\n\x03val\x18\x02 \x01(\x0b\x32\x05.Term\"\x98\x0e\n\x08TermType\x12\t\n\x05\x44\x41TUM\x10\x01\x12\x0e\n\nMAKE_ARRAY\x10\x02\x12\x0c\n\x08MAKE_OBJ\x10\x03\x12\x07\n\x03VAR\x10\n\x12\x0e\n\nJAVASCRIPT\x10\x0b\x12\t\n\x05\x45RROR\x10\x0c\x12\x10\n\x0cIMPLICIT_VAR\x10\r\x12\x0b\n\x06RANDOM\x10\x97\x01\x12\x06\n\x02\x44\x42\x10\x0e\x12\t\n\x05TABLE\x10\x0f\x12\x07\n\x03GET\x10\x10\x12\x0b\n\x07GET_ALL\x10N\x12\x06\n\x02\x45Q\x10\x11\x12\x06\n\x02NE\x10\x12\x12\x06\n\x02LT\x10\x13\x12\x06\n\x02LE\x10\x14\x12\x06\n\x02GT\x10\x15\x12\x06\n\x02GE\x10\x16\x12\x07\n\x03NOT\x10\x17\x12\x07\n\x03\x41\x44\x44\x10\x18\x12\x07\n\x03SUB\x10\x19\x12\x07\n\x03MUL\x10\x1a\x12\x07\n\x03\x44IV\x10\x1b\x12\x07\n\x03MOD\x10\x1c\x12\n\n\x06\x41PPEND\x10\x1d\x12\x0b\n\x07PREPEND\x10P\x12\x0e\n\nDIFFERENCE\x10_\x12\x0e\n\nSET_INSERT\x10X\x12\x14\n\x10SET_INTERSECTION\x10Y\x12\r\n\tSET_UNION\x10Z\x12\x12\n\x0eSET_DIFFERENCE\x10[\x12\t\n\x05SLICE\x10\x1e\x12\x08\n\x04SKIP\x10\x46\x12\t\n\x05LIMIT\x10G\x12\x0e\n\nINDEXES_OF\x10W\x12\x0c\n\x08\x43ONTAINS\x10]\x12\r\n\tGET_FIELD\x10\x1f\x12\x08\n\x04KEYS\x10^\x12\x0b\n\x06OBJECT\x10\x8f\x01\x12\x0e\n\nHAS_FIELDS\x10 \x12\x0f\n\x0bWITH_FIELDS\x10`\x12\t\n\x05PLUCK\x10!\x12\x0b\n\x07WITHOUT\x10\"\x12\t\n\x05MERGE\x10#\x12\x0b\n\x07\x42\x45TWEEN\x10$\x12\n\n\x06REDUCE\x10%\x12\x07\n\x03MAP\x10&\x12\n\n\x06\x46ILTER\x10\'\x12\r\n\tCONCATMAP\x10(\x12\x0b\n\x07ORDERBY\x10)\x12\x0c\n\x08\x44ISTINCT\x10*\x12\t\n\x05\x43OUNT\x10+\x12\x0c\n\x08IS_EMPTY\x10V\x12\t\n\x05UNION\x10,\x12\x07\n\x03NTH\x10-\x12\x0e\n\nINNER_JOIN\x10\x30\x12\x0e\n\nOUTER_JOIN\x10\x31\x12\x0b\n\x07\x45Q_JOIN\x10\x32\x12\x07\n\x03ZIP\x10H\x12\r\n\tINSERT_AT\x10R\x12\r\n\tDELETE_AT\x10S\x12\r\n\tCHANGE_AT\x10T\x12\r\n\tSPLICE_AT\x10U\x12\r\n\tCOERCE_TO\x10\x33\x12\n\n\x06TYPEOF\x10\x34\x12\n\n\x06UPDATE\x10\x35\x12\n\n\x06\x44\x45LETE\x10\x36\x12\x0b\n\x07REPLACE\x10\x37\x12\n\n\x06INSERT\x10\x38\x12\r\n\tDB_CREATE\x10\x39\x12\x0b\n\x07\x44\x42_DROP\x10:\x12\x0b\n\x07\x44\x42_LIST\x10;\x12\x10\n\x0cTABLE_CREATE\x10<\x12\x0e\n\nTABLE_DROP\x10=\x12\x0e\n\nTABLE_LIST\x10>\x12\t\n\x04SYNC\x10\x8a\x01\x12\x10\n\x0cINDEX_CREATE\x10K\x12\x0e\n\nINDEX_DROP\x10L\x12\x0e\n\nINDEX_LIST\x10M\x12\x11\n\x0cINDEX_STATUS\x10\x8b\x01\x12\x0f\n\nINDEX_WAIT\x10\x8c\x01\x12\x0b\n\x07\x46UNCALL\x10@\x12\n\n\x06\x42RANCH\x10\x41\x12\x07\n\x03\x41NY\x10\x42\x12\x07\n\x03\x41LL\x10\x43\x12\x0b\n\x07\x46OREACH\x10\x44\x12\x08\n\x04\x46UNC\x10\x45\x12\x07\n\x03\x41SC\x10I\x12\x08\n\x04\x44\x45SC\x10J\x12\x08\n\x04INFO\x10O\x12\t\n\x05MATCH\x10\x61\x12\x0b\n\x06UPCASE\x10\x8d\x01\x12\r\n\x08\x44OWNCASE\x10\x8e\x01\x12\n\n\x06SAMPLE\x10Q\x12\x0b\n\x07\x44\x45\x46\x41ULT\x10\\\x12\x08\n\x04JSON\x10\x62\x12\x0b\n\x07ISO8601\x10\x63\x12\x0e\n\nTO_ISO8601\x10\x64\x12\x0e\n\nEPOCH_TIME\x10\x65\x12\x11\n\rTO_EPOCH_TIME\x10\x66\x12\x07\n\x03NOW\x10g\x12\x0f\n\x0bIN_TIMEZONE\x10h\x12\n\n\x06\x44URING\x10i\x12\x08\n\x04\x44\x41TE\x10j\x12\x0f\n\x0bTIME_OF_DAY\x10~\x12\x0c\n\x08TIMEZONE\x10\x7f\x12\t\n\x04YEAR\x10\x80\x01\x12\n\n\x05MONTH\x10\x81\x01\x12\x08\n\x03\x44\x41Y\x10\x82\x01\x12\x10\n\x0b\x44\x41Y_OF_WEEK\x10\x83\x01\x12\x10\n\x0b\x44\x41Y_OF_YEAR\x10\x84\x01\x12\n\n\x05HOURS\x10\x85\x01\x12\x0c\n\x07MINUTES\x10\x86\x01\x12\x0c\n\x07SECONDS\x10\x87\x01\x12\t\n\x04TIME\x10\x88\x01\x12\n\n\x06MONDAY\x10k\x12\x0b\n\x07TUESDAY\x10l\x12\r\n\tWEDNESDAY\x10m\x12\x0c\n\x08THURSDAY\x10n\x12\n\n\x06\x46RIDAY\x10o\x12\x0c\n\x08SATURDAY\x10p\x12\n\n\x06SUNDAY\x10q\x12\x0b\n\x07JANUARY\x10r\x12\x0c\n\x08\x46\x45\x42RUARY\x10s\x12\t\n\x05MARCH\x10t\x12\t\n\x05\x41PRIL\x10u\x12\x07\n\x03MAY\x10v\x12\x08\n\x04JUNE\x10w\x12\x08\n\x04JULY\x10x\x12\n\n\x06\x41UGUST\x10y\x12\r\n\tSEPTEMBER\x10z\x12\x0b\n\x07OCTOBER\x10{\x12\x0c\n\x08NOVEMBER\x10|\x12\x0c\n\x08\x44\x45\x43\x45MBER\x10}\x12\x0c\n\x07LITERAL\x10\x89\x01\x12\n\n\x05GROUP\x10\x90\x01\x12\x08\n\x03SUM\x10\x91\x01\x12\x08\n\x03\x41VG\x10\x92\x01\x12\x08\n\x03MIN\x10\x93\x01\x12\x08\n\x03MAX\x10\x94\x01\x12\n\n\x05SPLIT\x10\x95\x01\x12\x0c\n\x07UNGROUP\x10\x96\x01*\x07\x08\x90N\x10\xa1\x9c\x01')
 
 
 
@@ -31,11 +31,36 @@ _VERSIONDUMMY_VERSION = _descriptor.EnumDescriptor(
       name='V0_2', index=1, number=1915781601,
       options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='V0_3', index=2, number=1601562686,
+      options=None,
+      type=None),
   ],
   containing_type=None,
   options=None,
   serialized_start=29,
-  serialized_end=66,
+  serialized_end=80,
+)
+
+_VERSIONDUMMY_PROTOCOL = _descriptor.EnumDescriptor(
+  name='Protocol',
+  full_name='VersionDummy.Protocol',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='PROTOBUF', index=0, number=656407617,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='JSON', index=1, number=2120839367,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=82,
+  serialized_end=124,
 )
 
 _QUERY_QUERYTYPE = _descriptor.EnumDescriptor(
@@ -63,8 +88,8 @@ _QUERY_QUERYTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=299,
-  serialized_end=363,
+  serialized_start=357,
+  serialized_end=421,
 )
 
 _FRAME_FRAMETYPE = _descriptor.EnumDescriptor(
@@ -84,8 +109,8 @@ _FRAME_FRAMETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=432,
-  serialized_end=461,
+  serialized_start=490,
+  serialized_end=519,
 )
 
 _RESPONSE_RESPONSETYPE = _descriptor.EnumDescriptor(
@@ -125,8 +150,8 @@ _RESPONSE_RESPONSETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=649,
-  serialized_end=799,
+  serialized_start=707,
+  serialized_end=857,
 )
 
 _DATUM_DATUMTYPE = _descriptor.EnumDescriptor(
@@ -166,8 +191,8 @@ _DATUM_DATUMTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=997,
-  serialized_end=1093,
+  serialized_start=1055,
+  serialized_end=1151,
 )
 
 _TERM_TERMTYPE = _descriptor.EnumDescriptor(
@@ -205,195 +230,195 @@ _TERM_TERMTYPE = _descriptor.EnumDescriptor(
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='DB', index=7, number=14,
+      name='RANDOM', index=7, number=151,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='TABLE', index=8, number=15,
+      name='DB', index=8, number=14,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='GET', index=9, number=16,
+      name='TABLE', index=9, number=15,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='GET_ALL', index=10, number=78,
+      name='GET', index=10, number=16,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='EQ', index=11, number=17,
+      name='GET_ALL', index=11, number=78,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='NE', index=12, number=18,
+      name='EQ', index=12, number=17,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='LT', index=13, number=19,
+      name='NE', index=13, number=18,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='LE', index=14, number=20,
+      name='LT', index=14, number=19,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='GT', index=15, number=21,
+      name='LE', index=15, number=20,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='GE', index=16, number=22,
+      name='GT', index=16, number=21,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='NOT', index=17, number=23,
+      name='GE', index=17, number=22,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='ADD', index=18, number=24,
+      name='NOT', index=18, number=23,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='SUB', index=19, number=25,
+      name='ADD', index=19, number=24,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='MUL', index=20, number=26,
+      name='SUB', index=20, number=25,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='DIV', index=21, number=27,
+      name='MUL', index=21, number=26,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='MOD', index=22, number=28,
+      name='DIV', index=22, number=27,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='APPEND', index=23, number=29,
+      name='MOD', index=23, number=28,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='PREPEND', index=24, number=80,
+      name='APPEND', index=24, number=29,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='DIFFERENCE', index=25, number=95,
+      name='PREPEND', index=25, number=80,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='SET_INSERT', index=26, number=88,
+      name='DIFFERENCE', index=26, number=95,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='SET_INTERSECTION', index=27, number=89,
+      name='SET_INSERT', index=27, number=88,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='SET_UNION', index=28, number=90,
+      name='SET_INTERSECTION', index=28, number=89,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='SET_DIFFERENCE', index=29, number=91,
+      name='SET_UNION', index=29, number=90,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='SLICE', index=30, number=30,
+      name='SET_DIFFERENCE', index=30, number=91,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='SKIP', index=31, number=70,
+      name='SLICE', index=31, number=30,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='LIMIT', index=32, number=71,
+      name='SKIP', index=32, number=70,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='INDEXES_OF', index=33, number=87,
+      name='LIMIT', index=33, number=71,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='CONTAINS', index=34, number=93,
+      name='INDEXES_OF', index=34, number=87,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='GET_FIELD', index=35, number=31,
+      name='CONTAINS', index=35, number=93,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='KEYS', index=36, number=94,
+      name='GET_FIELD', index=36, number=31,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='HAS_FIELDS', index=37, number=32,
+      name='KEYS', index=37, number=94,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='WITH_FIELDS', index=38, number=96,
+      name='OBJECT', index=38, number=143,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='PLUCK', index=39, number=33,
+      name='HAS_FIELDS', index=39, number=32,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='WITHOUT', index=40, number=34,
+      name='WITH_FIELDS', index=40, number=96,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='MERGE', index=41, number=35,
+      name='PLUCK', index=41, number=33,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='BETWEEN', index=42, number=36,
+      name='WITHOUT', index=42, number=34,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='REDUCE', index=43, number=37,
+      name='MERGE', index=43, number=35,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='MAP', index=44, number=38,
+      name='BETWEEN', index=44, number=36,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='FILTER', index=45, number=39,
+      name='REDUCE', index=45, number=37,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='CONCATMAP', index=46, number=40,
+      name='MAP', index=46, number=38,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='ORDERBY', index=47, number=41,
+      name='FILTER', index=47, number=39,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='DISTINCT', index=48, number=42,
+      name='CONCATMAP', index=48, number=40,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='COUNT', index=49, number=43,
+      name='ORDERBY', index=49, number=41,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='IS_EMPTY', index=50, number=86,
+      name='DISTINCT', index=50, number=42,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='UNION', index=51, number=44,
+      name='COUNT', index=51, number=43,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='NTH', index=52, number=45,
+      name='IS_EMPTY', index=52, number=86,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='GROUPED_MAP_REDUCE', index=53, number=46,
+      name='UNION', index=53, number=44,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='GROUPBY', index=54, number=47,
+      name='NTH', index=54, number=45,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
@@ -541,178 +566,214 @@ _TERM_TERMTYPE = _descriptor.EnumDescriptor(
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='SAMPLE', index=91, number=81,
+      name='UPCASE', index=91, number=141,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='DEFAULT', index=92, number=92,
+      name='DOWNCASE', index=92, number=142,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='JSON', index=93, number=98,
+      name='SAMPLE', index=93, number=81,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='ISO8601', index=94, number=99,
+      name='DEFAULT', index=94, number=92,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='TO_ISO8601', index=95, number=100,
+      name='JSON', index=95, number=98,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='EPOCH_TIME', index=96, number=101,
+      name='ISO8601', index=96, number=99,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='TO_EPOCH_TIME', index=97, number=102,
+      name='TO_ISO8601', index=97, number=100,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='NOW', index=98, number=103,
+      name='EPOCH_TIME', index=98, number=101,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='IN_TIMEZONE', index=99, number=104,
+      name='TO_EPOCH_TIME', index=99, number=102,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='DURING', index=100, number=105,
+      name='NOW', index=100, number=103,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='DATE', index=101, number=106,
+      name='IN_TIMEZONE', index=101, number=104,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='TIME_OF_DAY', index=102, number=126,
+      name='DURING', index=102, number=105,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='TIMEZONE', index=103, number=127,
+      name='DATE', index=103, number=106,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='YEAR', index=104, number=128,
+      name='TIME_OF_DAY', index=104, number=126,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='MONTH', index=105, number=129,
+      name='TIMEZONE', index=105, number=127,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='DAY', index=106, number=130,
+      name='YEAR', index=106, number=128,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='DAY_OF_WEEK', index=107, number=131,
+      name='MONTH', index=107, number=129,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='DAY_OF_YEAR', index=108, number=132,
+      name='DAY', index=108, number=130,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='HOURS', index=109, number=133,
+      name='DAY_OF_WEEK', index=109, number=131,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='MINUTES', index=110, number=134,
+      name='DAY_OF_YEAR', index=110, number=132,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='SECONDS', index=111, number=135,
+      name='HOURS', index=111, number=133,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='TIME', index=112, number=136,
+      name='MINUTES', index=112, number=134,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='MONDAY', index=113, number=107,
+      name='SECONDS', index=113, number=135,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='TUESDAY', index=114, number=108,
+      name='TIME', index=114, number=136,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='WEDNESDAY', index=115, number=109,
+      name='MONDAY', index=115, number=107,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='THURSDAY', index=116, number=110,
+      name='TUESDAY', index=116, number=108,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='FRIDAY', index=117, number=111,
+      name='WEDNESDAY', index=117, number=109,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='SATURDAY', index=118, number=112,
+      name='THURSDAY', index=118, number=110,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='SUNDAY', index=119, number=113,
+      name='FRIDAY', index=119, number=111,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='JANUARY', index=120, number=114,
+      name='SATURDAY', index=120, number=112,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='FEBRUARY', index=121, number=115,
+      name='SUNDAY', index=121, number=113,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='MARCH', index=122, number=116,
+      name='JANUARY', index=122, number=114,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='APRIL', index=123, number=117,
+      name='FEBRUARY', index=123, number=115,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='MAY', index=124, number=118,
+      name='MARCH', index=124, number=116,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='JUNE', index=125, number=119,
+      name='APRIL', index=125, number=117,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='JULY', index=126, number=120,
+      name='MAY', index=126, number=118,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='AUGUST', index=127, number=121,
+      name='JUNE', index=127, number=119,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='SEPTEMBER', index=128, number=122,
+      name='JULY', index=128, number=120,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='OCTOBER', index=129, number=123,
+      name='AUGUST', index=129, number=121,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='NOVEMBER', index=130, number=124,
+      name='SEPTEMBER', index=130, number=122,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='DECEMBER', index=131, number=125,
+      name='OCTOBER', index=131, number=123,
       options=None,
       type=None),
     _descriptor.EnumValueDescriptor(
-      name='LITERAL', index=132, number=137,
+      name='NOVEMBER', index=132, number=124,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='DECEMBER', index=133, number=125,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='LITERAL', index=134, number=137,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='GROUP', index=135, number=144,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='SUM', index=136, number=145,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='AVG', index=137, number=146,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='MIN', index=138, number=147,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='MAX', index=139, number=148,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='SPLIT', index=140, number=149,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='UNGROUP', index=141, number=150,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=1268,
-  serialized_end=2989,
+  serialized_start=1326,
+  serialized_end=3142,
 )
 
 
@@ -729,12 +790,13 @@ _VERSIONDUMMY = _descriptor.Descriptor(
   nested_types=[],
   enum_types=[
     _VERSIONDUMMY_VERSION,
+    _VERSIONDUMMY_PROTOCOL,
   ],
   options=None,
   is_extendable=False,
   extension_ranges=[],
   serialized_start=13,
-  serialized_end=66,
+  serialized_end=124,
 )
 
 
@@ -768,8 +830,8 @@ _QUERY_ASSOCPAIR = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=253,
-  serialized_end=297,
+  serialized_start=311,
+  serialized_end=355,
 )
 
 _QUERY = _descriptor.Descriptor(
@@ -831,8 +893,8 @@ _QUERY = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=69,
-  serialized_end=363,
+  serialized_start=127,
+  serialized_end=421,
 )
 
 
@@ -874,8 +936,8 @@ _FRAME = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=365,
-  serialized_end=461,
+  serialized_start=423,
+  serialized_end=519,
 )
 
 
@@ -902,8 +964,8 @@ _BACKTRACE = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=463,
-  serialized_end=498,
+  serialized_start=521,
+  serialized_end=556,
 )
 
 
@@ -959,8 +1021,8 @@ _RESPONSE = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=501,
-  serialized_end=799,
+  serialized_start=559,
+  serialized_end=857,
 )
 
 
@@ -994,8 +1056,8 @@ _DATUM_ASSOCPAIR = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=950,
-  serialized_end=995,
+  serialized_start=1008,
+  serialized_end=1053,
 )
 
 _DATUM = _descriptor.Descriptor(
@@ -1057,8 +1119,8 @@ _DATUM = _descriptor.Descriptor(
   options=None,
   is_extendable=True,
   extension_ranges=[(10000, 20001), ],
-  serialized_start=802,
-  serialized_end=1102,
+  serialized_start=860,
+  serialized_end=1160,
 )
 
 
@@ -1092,8 +1154,8 @@ _TERM_ASSOCPAIR = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=253,
-  serialized_end=297,
+  serialized_start=311,
+  serialized_end=355,
 )
 
 _TERM = _descriptor.Descriptor(
@@ -1141,11 +1203,12 @@ _TERM = _descriptor.Descriptor(
   options=None,
   is_extendable=True,
   extension_ranges=[(10000, 20001), ],
-  serialized_start=1105,
-  serialized_end=2998,
+  serialized_start=1163,
+  serialized_end=3151,
 )
 
 _VERSIONDUMMY_VERSION.containing_type = _VERSIONDUMMY;
+_VERSIONDUMMY_PROTOCOL.containing_type = _VERSIONDUMMY;
 _QUERY_ASSOCPAIR.fields_by_name['val'].message_type = _TERM
 _QUERY_ASSOCPAIR.containing_type = _QUERY;
 _QUERY.fields_by_name['type'].enum_type = _QUERY_QUERYTYPE

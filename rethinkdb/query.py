@@ -14,13 +14,16 @@ def js(js_str, timeout=()):
 def error(*msg):
     return UserError(*msg)
 
+def random(*args, **kwargs):
+    return Random(*args, **kwargs)
+
 def do(arg0, *args):
     args = [arg0]+[x for x in args]
     return FunCall(func_wrap(args[-1]), *args[:-1])
 
 row = ImplicitVar()
 
-def table(tbl_name, use_outdated=False):
+def table(tbl_name, use_outdated=()):
     return Table(tbl_name, use_outdated=use_outdated)
 
 def db(db_name):
@@ -35,8 +38,8 @@ def db_drop(db_name):
 def db_list():
     return DbList()
 
-def table_create(table_name, primary_key=(), datacenter=(), cache_size=(), durability=()):
-    return TableCreateTL(table_name, primary_key=primary_key, datacenter=datacenter, cache_size=cache_size, durability=durability)
+def table_create(table_name, primary_key=(), datacenter=(), durability=()):
+    return TableCreateTL(table_name, primary_key=primary_key, datacenter=datacenter, durability=durability)
 
 def table_drop(table_name):
     return TableDropTL(table_name)
@@ -46,16 +49,6 @@ def table_list():
 
 def branch(predicate, true_branch, false_branch):
     return Branch(predicate, true_branch, false_branch)
-
-# groupBy reductions
-
-count = {'COUNT': True}
-
-def sum(attr):
-    return {'SUM': attr}
-
-def avg(attr):
-    return {'AVG': attr}
 
 # orderBy orders
 
@@ -102,6 +95,12 @@ def mod(a, b):
 
 def not_(a):
     return Not(a)
+
+def and_(*args):
+    return All(*args)
+
+def or_(*args):
+    return Any(*args)
 
 def all(*args):
     return All(*args)
@@ -162,3 +161,6 @@ def literal(val=()):
         return Literal(val)
     else:
         return Literal()
+
+def object(*args):
+    return Object(*args)
