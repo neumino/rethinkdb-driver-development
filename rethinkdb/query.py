@@ -2,14 +2,22 @@ from .ast import *
 from . import ql2_pb2 as p
 import datetime
 
+pTerm = p.Term.TermType
+
 """
 All top level functions defined here are the starting points for RQL queries
 """
-def json(json_str):
-    return Json(json_str)
+def json(*args):
+    return Json(*args)
 
-def js(js_str, timeout=()):
-    return JavaScript(js_str, timeout=timeout)
+def js(*args, **kwargs):
+    return JavaScript(*args, **kwargs)
+
+def args(*args):
+    return Args(*args)
+
+def http(url, **kwargs):
+    return Http(func_wrap(url), **kwargs)
 
 def error(*msg):
     return UserError(*msg)
@@ -17,46 +25,45 @@ def error(*msg):
 def random(*args, **kwargs):
     return Random(*args, **kwargs)
 
-def do(arg0, *args):
-    args = [arg0]+[x for x in args]
-    return FunCall(func_wrap(args[-1]), *args[:-1])
+def do(*args):
+    return FunCall(*args)
 
 row = ImplicitVar()
 
-def table(tbl_name, use_outdated=()):
-    return Table(tbl_name, use_outdated=use_outdated)
+def table(*args, **kwargs):
+    return Table(*args, **kwargs)
 
-def db(db_name):
-    return DB(db_name)
+def db(*args):
+    return DB(*args)
 
-def db_create(db_name):
-    return DbCreate(db_name)
+def db_create(*args):
+    return DbCreate(*args)
 
-def db_drop(db_name):
-    return DbDrop(db_name)
+def db_drop(*args):
+    return DbDrop(*args)
 
-def db_list():
-    return DbList()
+def db_list(*args):
+    return DbList(*args)
 
-def table_create(table_name, primary_key=(), datacenter=(), durability=()):
-    return TableCreateTL(table_name, primary_key=primary_key, datacenter=datacenter, durability=durability)
+def table_create(*args, **kwargs):
+    return TableCreateTL(*args, **kwargs)
 
-def table_drop(table_name):
-    return TableDropTL(table_name)
+def table_drop(*args):
+    return TableDropTL(*args)
 
-def table_list():
-    return TableListTL()
+def table_list(*args):
+    return TableListTL(*args)
 
-def branch(predicate, true_branch, false_branch):
-    return Branch(predicate, true_branch, false_branch)
+def branch(*args):
+    return Branch(*args)
 
 # orderBy orders
 
-def asc(attr):
-    return Asc(func_wrap(attr))
+def asc(*args):
+    return Asc(*[func_wrap(arg) for arg in args])
 
-def desc(attr):
-    return Desc(func_wrap(attr))
+def desc(*args):
+    return Desc(*[func_wrap(arg) for arg in args])
 
 # math and logic
 
@@ -90,11 +97,11 @@ def mul(*args):
 def div(*args):
     return Div(*args)
 
-def mod(a, b):
-    return Mod(a, b)
+def mod(*args):
+    return Mod(*args)
 
-def not_(a):
-    return Not(a)
+def not_(*args):
+    return Not(*args)
 
 def and_(*args):
     return All(*args)
@@ -108,59 +115,84 @@ def all(*args):
 def any(*args):
     return Any(*args)
 
-def type_of(val):
-    return TypeOf(val)
+def type_of(*args):
+    return TypeOf(*args)
 
-def info(val):
-    return Info(val)
+def info(*args):
+    return Info(*args)
+
+def binary(data):
+    return Binary(data)
 
 def time(*args):
     return Time(*args)
 
-def iso8601(string, default_timezone=()):
-    return ISO8601(string, default_timezone=default_timezone)
+def iso8601(*args, **kwargs):
+    return ISO8601(*args, **kwargs)
 
-def epoch_time(number):
-    return EpochTime(number)
+def epoch_time(*args):
+    return EpochTime(*args)
 
-def now():
-    return Now()
+def now(*args):
+    return Now(*args)
 
 class RqlTimeName(RqlQuery):
     def compose(self, args, optargs):
         return 'r.'+self.st
 
 # Time enum values
-monday      = type('', (RqlTimeName,), {'tt':p.Term.MONDAY, 'st': 'monday'})()
-tuesday     = type('', (RqlTimeName,), {'tt':p.Term.TUESDAY, 'st': 'tuesday'})()
-wednesday   = type('', (RqlTimeName,), {'tt':p.Term.WEDNESDAY, 'st': 'wednesday'})()
-thursday    = type('', (RqlTimeName,), {'tt':p.Term.THURSDAY, 'st': 'thursday'})()
-friday      = type('', (RqlTimeName,), {'tt':p.Term.FRIDAY, 'st': 'friday'})()
-saturday    = type('', (RqlTimeName,), {'tt':p.Term.SATURDAY, 'st': 'saturday'})()
-sunday      = type('', (RqlTimeName,), {'tt':p.Term.SUNDAY, 'st': 'sunday'})()
+monday      = type('', (RqlTimeName,), {'tt':pTerm.MONDAY, 'st': 'monday'})()
+tuesday     = type('', (RqlTimeName,), {'tt':pTerm.TUESDAY, 'st': 'tuesday'})()
+wednesday   = type('', (RqlTimeName,), {'tt':pTerm.WEDNESDAY, 'st': 'wednesday'})()
+thursday    = type('', (RqlTimeName,), {'tt':pTerm.THURSDAY, 'st': 'thursday'})()
+friday      = type('', (RqlTimeName,), {'tt':pTerm.FRIDAY, 'st': 'friday'})()
+saturday    = type('', (RqlTimeName,), {'tt':pTerm.SATURDAY, 'st': 'saturday'})()
+sunday      = type('', (RqlTimeName,), {'tt':pTerm.SUNDAY, 'st': 'sunday'})()
 
-january     = type('', (RqlTimeName,), {'tt':p.Term.JANUARY, 'st': 'january'})()
-february    = type('', (RqlTimeName,), {'tt':p.Term.FEBRUARY, 'st': 'february'})()
-march       = type('', (RqlTimeName,), {'tt': p.Term.MARCH, 'st': 'march'})()
-april       = type('', (RqlTimeName,), {'tt': p.Term.APRIL, 'st': 'april'})()
-may         = type('', (RqlTimeName,), {'tt': p.Term.MAY, 'st': 'may'})()
-june        = type('', (RqlTimeName,), {'tt': p.Term.JUNE, 'st': 'june'})()
-july        = type('', (RqlTimeName,), {'tt': p.Term.JULY, 'st': 'july'})()
-august      = type('', (RqlTimeName,), {'tt': p.Term.AUGUST, 'st': 'august'})()
-september   = type('', (RqlTimeName,), {'tt': p.Term.SEPTEMBER, 'st': 'september'})()
-october     = type('', (RqlTimeName,), {'tt': p.Term.OCTOBER, 'st': 'october'})()
-november    = type('', (RqlTimeName,), {'tt': p.Term.NOVEMBER, 'st': 'november'})()
-december    = type('', (RqlTimeName,), {'tt': p.Term.DECEMBER, 'st': 'december'})()
+january     = type('', (RqlTimeName,), {'tt':pTerm.JANUARY, 'st': 'january'})()
+february    = type('', (RqlTimeName,), {'tt':pTerm.FEBRUARY, 'st': 'february'})()
+march       = type('', (RqlTimeName,), {'tt': pTerm.MARCH, 'st': 'march'})()
+april       = type('', (RqlTimeName,), {'tt': pTerm.APRIL, 'st': 'april'})()
+may         = type('', (RqlTimeName,), {'tt': pTerm.MAY, 'st': 'may'})()
+june        = type('', (RqlTimeName,), {'tt': pTerm.JUNE, 'st': 'june'})()
+july        = type('', (RqlTimeName,), {'tt': pTerm.JULY, 'st': 'july'})()
+august      = type('', (RqlTimeName,), {'tt': pTerm.AUGUST, 'st': 'august'})()
+september   = type('', (RqlTimeName,), {'tt': pTerm.SEPTEMBER, 'st': 'september'})()
+october     = type('', (RqlTimeName,), {'tt': pTerm.OCTOBER, 'st': 'october'})()
+november    = type('', (RqlTimeName,), {'tt': pTerm.NOVEMBER, 'st': 'november'})()
+december    = type('', (RqlTimeName,), {'tt': pTerm.DECEMBER, 'st': 'december'})()
 
-def make_timezone(tzstring):
-    return RqlTzinfo(tzstring)
+def make_timezone(*args):
+    return RqlTzinfo(*args)
 
 # Merge values
-def literal(val=()):
-    if val:
-        return Literal(val)
-    else:
-        return Literal()
+def literal(*args):
+    return Literal(*args)
 
 def object(*args):
     return Object(*args)
+
+def uuid(*args):
+    return UUID(*args)
+
+# Global geospatial operations
+def geojson(*args):
+    return GeoJson(*args)
+
+def point(*args):
+    return Point(*args)
+
+def line(*args):
+    return Line(*args)
+
+def polygon(*args):
+    return Polygon(*args)
+
+def distance(*args, **kwargs):
+    return Distance(*args, **kwargs)
+
+def intersects(*args):
+    return Intersects(*args)
+
+def circle(*args, **kwargs):
+    return Circle(*args, **kwargs)

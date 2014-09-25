@@ -10,12 +10,28 @@ from os import environ
 
 from rethinkdb import ql2_pb2 as p
 
+pResponse = p.Response.ResponseType
+pQuery = p.Query.QueryType
+
 from rethinkdb import repl # For the repl connection
 from rethinkdb.errors import *
 from rethinkdb.ast import RqlQuery, DB, recursively_convert_pseudotypes
 
-import pprint
-pp = pprint.PrettyPrinter(indent=4)
+try:
+    {}.iteritems
+    dict_items = lambda d: d.iteritems()
+except AttributeError:
+    dict_items = lambda d: d.items()
+
+def decodeUFTPipe(inputPipe):
+    # attempt to decode input as utf-8 with fallbacks to get something useful
+    try:
+        return inputPipe.decode('utf-8', errors='ignore')
+    except TypeError:
+        try:
+            return inputPipe.decode('utf-8')
+        except UnicodeError:
+            return repr(inputPipe)
 
 class Query(object):
     def __init__(self, type, token, term, global_optargs):
@@ -30,7 +46,7 @@ class Query(object):
             res.append(self.term.build())
         if self.global_optargs is not None:
             optargs = { }
-            for (k,v) in self.global_optargs.iteritems():
+            for k, v in dict_items(self.global_optargs):
                 optargs[k] = v.build() if isinstance(v, RqlQuery) else v
             res.append(optargs)
         return json.dumps(res, ensure_ascii=False, allow_nan=False)
@@ -54,15 +70,17 @@ class Cursor(object):
         self.outstanding_requests = 0
         self.end_flag = False
         self.connection_closed = False
+        self.it = iter(self._it())
 
     def _extend(self, response):
-        self.end_flag = response.type != p.Response.SUCCESS_PARTIAL
+        self.end_flag = response.type != pResponse.SUCCESS_PARTIAL and \
+                        response.type != pResponse.SUCCESS_FEED
         self.responses.append(response)
 
         if len(self.responses) == 1 and not self.end_flag:
             self.conn._async_continue_cursor(self)
 
-    def __iter__(self):
+    def _it(self):
         while True:
             if len(self.responses) == 0 and self.connection_closed:
                 raise RqlDriverError("Connection closed, cannot read cursor")
@@ -75,13 +93,24 @@ class Cursor(object):
                 break
 
             self.conn._check_error_response(self.responses[0], self.query.term)
-            if self.responses[0].type != p.Response.SUCCESS_PARTIAL and self.responses[0].type != p.Response.SUCCESS_SEQUENCE:
+            if self.responses[0].type != pResponse.SUCCESS_PARTIAL and \
+               self.responses[0].type != pResponse.SUCCESS_SEQUENCE and \
+               self.responses[0].type != pResponse.SUCCESS_FEED:
                 raise RqlDriverError("Unexpected response type received for cursor")
 
             response_data = recursively_convert_pseudotypes(self.responses[0].data, self.opts)
             del self.responses[0]
             for item in response_data:
                 yield item
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        return next(self.it)
+
+    def __next__(self):
+        return next(self.it)
 
     def close(self):
         if not self.end_flag:
@@ -123,9 +152,9 @@ class Connection(object):
         except Exception as err:
             raise RqlDriverError("Could not connect to %s:%s. Error: %s" % (self.host, self.port, err))
 
-        self._sock_sendall(struct.pack("<L", p.VersionDummy.V0_3))
+        self._sock_sendall(struct.pack("<L", p.VersionDummy.Version.V0_3))
         self._sock_sendall(struct.pack("<L", len(self.auth_key)) + str.encode(self.auth_key, 'ascii'))
-        self._sock_sendall(struct.pack("<L", p.VersionDummy.JSON))
+        self._sock_sendall(struct.pack("<L", p.VersionDummy.Protocol.JSON))
 
         # Read out the response from the server, which will be a null-terminated string
         response = b""
@@ -137,7 +166,7 @@ class Connection(object):
 
         if response != b"SUCCESS":
             self.close(noreply_wait=False)
-            raise RqlDriverError("Server dropped connection with message: \"%s\"" % response.strip())
+            raise RqlDriverError("Server dropped connection with message: \"%s\"" % decodeUFTPipe(response).strip())
 
         # Connection is now initialized
 
@@ -154,7 +183,7 @@ class Connection(object):
                 pass
             self.socket.close()
             self.socket = None
-        for (token, cursor) in self.cursor_cache.iteritems():
+        for token, cursor in dict_items(self.cursor_cache):
             cursor.end_flag = True
             cursor.connection_closed = True
         self.cursor_cache = { }
@@ -164,7 +193,7 @@ class Connection(object):
         self.next_token += 1
 
         # Construct query
-        query = Query(p.Query.NOREPLY_WAIT, token, None, None)
+        query = Query(pQuery.NOREPLY_WAIT, token, None, None)
 
         # Send the request
         return self._send_query(query)
@@ -203,7 +232,7 @@ class Connection(object):
                global_optargs['db'] = DB(self.db)
 
         # Construct query
-        query = Query(p.Query.START, self.next_token, term, global_optargs)
+        query = Query(pQuery.START, self.next_token, term, global_optargs)
         self.next_token += 1
 
         return self._send_query(query, global_optargs)
@@ -213,7 +242,9 @@ class Connection(object):
         cursor._extend(response)
         cursor.outstanding_requests -= 1
 
-        if response.type != p.Response.SUCCESS_PARTIAL and cursor.outstanding_requests == 0:
+        if response.type != pResponse.SUCCESS_PARTIAL and \
+           response.type != pResponse.SUCCESS_FEED and \
+           cursor.outstanding_requests == 0:
             del self.cursor_cache[response.token]
 
     def _continue_cursor(self, cursor):
@@ -221,15 +252,17 @@ class Connection(object):
         self._handle_cursor_response(self._read_response(cursor.query.token))
 
     def _async_continue_cursor(self, cursor):
-        self.cursor_cache[cursor.query.token].outstanding_requests += 1
+        if cursor.outstanding_requests != 0:
+            return
 
-        query = Query(p.Query.CONTINUE, cursor.query.token, None, None)
+        cursor.outstanding_requests = 1
+        query = Query(pQuery.CONTINUE, cursor.query.token, None, None)
         self._send_query(query, cursor.opts, async=True)
 
     def _end_cursor(self, cursor):
         self.cursor_cache[cursor.query.token].outstanding_requests += 1
 
-        query = Query(p.Query.STOP, cursor.query.token, None, None)
+        query = Query(pQuery.STOP, cursor.query.token, None, None)
         self._send_query(query, async=True)
         self._handle_cursor_response(self._read_response(cursor.query.token))
 
@@ -275,15 +308,15 @@ class Connection(object):
                 raise RqlDriverError("Unexpected response received.")
 
     def _check_error_response(self, response, term):
-        if response.type == p.Response.RUNTIME_ERROR:
+        if response.type == pResponse.RUNTIME_ERROR:
             message = response.data[0]
             frames = response.backtrace
             raise RqlRuntimeError(message, term, frames)
-        elif response.type == p.Response.COMPILE_ERROR:
+        elif response.type == pResponse.COMPILE_ERROR:
             message = response.data[0]
             frames = response.backtrace
             raise RqlCompileError(message, term, frames)
-        elif response.type == p.Response.CLIENT_ERROR:
+        elif response.type == pResponse.CLIENT_ERROR:
             message = response.data[0]
             frames = response.backtrace
             raise RqlClientError(message, term, frames)
@@ -311,20 +344,21 @@ class Connection(object):
 
         # Get response
         response = self._read_response(query.token)
-
         self._check_error_response(response, query.term)
 
-        if response.type == p.Response.SUCCESS_PARTIAL or response.type == p.Response.SUCCESS_SEQUENCE:
+        if response.type == pResponse.SUCCESS_PARTIAL or \
+           response.type == pResponse.SUCCESS_SEQUENCE or \
+           response.type == pResponse.SUCCESS_FEED:
             # Sequence responses
             value = Cursor(self, query, opts)
             self.cursor_cache[query.token] = value
             value._extend(response)
-        elif response.type == p.Response.SUCCESS_ATOM:
+        elif response.type == pResponse.SUCCESS_ATOM:
             # Atom response
             if len(response.data) < 1:
                 value = None
             value = recursively_convert_pseudotypes(response.data[0], opts)
-        elif response.type == p.Response.WAIT_COMPLETE:
+        elif response.type == pResponse.WAIT_COMPLETE:
             # Noreply_wait response
             return None
         else:
